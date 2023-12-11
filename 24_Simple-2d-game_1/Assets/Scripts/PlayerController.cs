@@ -6,6 +6,8 @@ public class PlayerController : MonoBehaviour
 {
     [Header("Ўвидк≥сть перем≥щенн€ гравц€")]
     [SerializeField] private int _spead = 10;
+    [SerializeField] private int _walkSpead = 10;
+    [SerializeField] private int _runSpead = 20;
     [Header("—ила прижка гравц€")]
     [SerializeField] private float _jumpForce;
     [SerializeField] private ContactFilter2D _platform;
@@ -18,6 +20,9 @@ public class PlayerController : MonoBehaviour
     private Tylob _tylob;
     private Vector3 verticalScaleStay = new Vector3(1f, 2f, 1f);
     private Vector3 verticalScaleSit = new Vector3(1f, 1.3f, 1f);
+    private Vector3 tylobPositionStay = new Vector3(0f, -1f, 0f);
+    private Vector3 tylobPositionSit = new Vector3(0f, -.66f, 0f);
+    private Quaternion verticalRotation = Quaternion.Euler(0f, 0f, 0f);
 
 
     // Start is called before the first frame update
@@ -43,18 +48,31 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     private void GetInput()
     {
+        if (Input.GetKey(KeyCode.LeftShift))
+        {
+            _spead = _runSpead;
+        }
+
+        else
+        {
+            _spead = _walkSpead;
+        }
+
+
         if (transform.rotation.eulerAngles.z < 70f || transform.rotation.eulerAngles.z > 290f)
         {
             if (Input.GetKey(KeyCode.LeftArrow))
             {
                 transform.localPosition += -transform.right * _spead * Time.deltaTime;
                 isRiht = false;
+                //transform.localRotation = verticalRotation;
             }
 
             if (Input.GetKey(KeyCode.RightArrow))
             {
                 transform.localPosition += transform.right * _spead * Time.deltaTime;
                 isRiht = true;
+                //transform.localRotation = verticalRotation;
             } 
         }
 
@@ -68,11 +86,13 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKey(KeyCode.LeftControl))
         {
             _tylob.transform.localScale = verticalScaleSit;
+            _tylob.transform.localPosition = tylobPositionSit;
         }
 
         else
         {
             _tylob.transform.localScale = verticalScaleStay;
+            _tylob.transform.localPosition = tylobPositionStay;
         }
 
     }

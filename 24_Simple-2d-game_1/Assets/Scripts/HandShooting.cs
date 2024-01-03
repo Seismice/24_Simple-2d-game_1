@@ -10,6 +10,7 @@ public class HandShooting : MonoBehaviour
 
     private RykaVerHor _rykaVerHor; // Прапорець, що вказує на горизонтальне положення руки
     private PlayerController _playerController;
+    private NumberOfShoot _numberOfShoot;
 
     private Vector3 shotPointLeft = new Vector3(0f, 0.7f, 0f);
     private Vector3 shotPointRight = new Vector3(0f, -0.7f, 0f);
@@ -18,6 +19,7 @@ public class HandShooting : MonoBehaviour
     {
         _rykaVerHor = GetComponent<RykaVerHor>();
         _playerController = GetComponentInParent<PlayerController>();
+        _numberOfShoot = GetComponentInParent<NumberOfShoot>();
     }
 
     void Update()
@@ -28,7 +30,13 @@ public class HandShooting : MonoBehaviour
         {
             if (_playerController.transform.rotation.eulerAngles.z < 70f || _playerController.transform.rotation.eulerAngles.z > 290f)
             {
-                Shoot(); 
+                if (_numberOfShoot.numberOfPatron > 0)
+                {
+                    Shoot();
+                    _numberOfShoot.numberOfPatron--;
+                    _numberOfShoot.textOfPatrons.text = _numberOfShoot.numberOfPatron.ToString();
+                    //Debug.Log("_numberOfShoot.numberOfPatron = " + _numberOfShoot.numberOfPatron); 
+                }
             }
         }
     }

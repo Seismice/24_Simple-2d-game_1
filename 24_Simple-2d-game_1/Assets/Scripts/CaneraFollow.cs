@@ -34,7 +34,7 @@ public class CaneraFollow : MonoBehaviour
         {
             newPosition.y = follow.y;
         }
-        Debug.Log("rb.velocity.magnitude =" + rb.velocity.magnitude);
+        //Debug.Log("rb.velocity.magnitude =" + rb.velocity.magnitude);
         float moveSpead = (rb.velocity.magnitude > spead) ? rb.velocity.magnitude : spead;
         transform.position = Vector3.MoveTowards(transform.position, newPosition, moveSpead * Time.deltaTime);
     }

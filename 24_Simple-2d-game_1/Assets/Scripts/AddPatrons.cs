@@ -8,6 +8,7 @@ public class AddPatrons : MonoBehaviour
     
     NumberOfShoot _numberOfShoot;
     public UnityEvent OnDestroyedPatron;
+    [SerializeField] int addPatrons = 20;
 
     // Start is called before the first frame update
     void Start()
@@ -26,8 +27,8 @@ public class AddPatrons : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            Debug.Log("OnTriggerEnter2D");
-            _numberOfShoot.numberOfPatron += 20;
+            //Debug.Log("OnTriggerEnter2D");
+            _numberOfShoot.numberOfPatron += addPatrons;
             _numberOfShoot.textOfPatrons.text = _numberOfShoot.numberOfPatron.ToString();
             Destroy(gameObject);
         }

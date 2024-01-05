@@ -11,23 +11,50 @@ public class Enemy : MonoBehaviour
     private GameObject player;
     private bool isLying = false;
     public UnityEvent OnDestroyed;
-    private int hitCount = 0;
+    //private int hitCount = 0;
+    private float lieStartTime;
+    [SerializeField] float health = 3f;
+    [SerializeField] float maxHealth = 3f;
+    private FloatingHealthBar _floatingHealthBar;
+
+    private void Awake()
+    {
+        _floatingHealthBar = GetComponentInChildren<FloatingHealthBar>();
+    }
 
     void Start()
     {
         player = GameObject.FindWithTag("Player");
+        _floatingHealthBar.UpdateHealthBar(health, maxHealth);
     }
 
     void Update()
     {
         // Перевірка, чи прямокутник впав (Rotation Z близько до 90 або до 270)
-        if (!hasBeenDestroyed && transform.rotation.eulerAngles.z > 260f && transform.rotation.eulerAngles.z < 280f ||
-            !hasBeenDestroyed && transform.rotation.eulerAngles.z > 80f && transform.rotation.eulerAngles.z < 100f)
+        //if (!hasBeenDestroyed && transform.rotation.eulerAngles.z > 260f && transform.rotation.eulerAngles.z < 280f ||
+        //    !hasBeenDestroyed && transform.rotation.eulerAngles.z > 80f && transform.rotation.eulerAngles.z < 100f)
+        //{
+        //    isLying = true;
+        //    // Знищення прямокутника
+        //    //Destroy(gameObject, 2);
+        //    //hasBeenDestroyed = true;
+        //    transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, 0f);
+        //    isLying = false;
+        //}
+
+        if (!hasBeenDestroyed && !isLying &&
+        (transform.rotation.eulerAngles.z > 260f && transform.rotation.eulerAngles.z < 280f ||
+         transform.rotation.eulerAngles.z > 80f && transform.rotation.eulerAngles.z < 100f))
         {
             isLying = true;
-            // Знищення прямокутника
-            Destroy(gameObject, 2);
-            hasBeenDestroyed = true;
+            lieStartTime = Time.time;
+        }
+
+        if (isLying && Time.time - lieStartTime >= 5f)
+        {
+            // Після 2 секунд виконуємо дії
+            transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, 0f);
+            isLying = false;
         }
 
         if (!hasBeenDestroyed && !isLying)
@@ -54,18 +81,32 @@ public class Enemy : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Bullet"))
         {
+
+
             // Якщо снаряд попав в прямокутник, збільшити лічильник
-            hitCount++;
+            //hitCount++;
 
             // Перевірити, чи досягнуто необхідну кількість попадань
-            if (hitCount >= 5)
-            {
-                // Викликати подію при знищенні прямокутника
-                //OnDestroyed.Invoke();
+            //if (hitCount >= numberDeadShoot)
+            //{
+            //    // Викликати подію при знищенні прямокутника
+            //    //OnDestroyed.Invoke();
 
-                // Знищити прямокутник
-                Destroy(gameObject);
-            }
+            //    // Знищити прямокутник
+            //    Destroy(gameObject);
+            //}
+
+            TakeDamage(1f);
+        }
+    }
+
+    public void TakeDamage(float damageAmount)
+    {
+        health -= damageAmount;
+        _floatingHealthBar.UpdateHealthBar(health, maxHealth);
+        if(health <= 0)
+        {
+            Destroy(gameObject);
         }
     }
 }

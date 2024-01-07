@@ -23,6 +23,8 @@ public class PlayerController : MonoBehaviour
     private Vector3 tylobPositionStay = new Vector3(0f, -1f, 0f);
     private Vector3 tylobPositionSit = new Vector3(0f, -.66f, 0f);
     private Quaternion verticalRotation = Quaternion.Euler(0f, 0f, 0f);
+    [SerializeField] private EndMenu EndMenu;
+    public bool isPaused = false;
 
 
     // Start is called before the first frame update
@@ -48,6 +50,19 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     private void GetInput()
     {
+        // Якщо гра не на паузі і натиснута кнопка Esc
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (isPaused)
+            {
+                ResumeGame(); // Відновлення гри
+            }
+            else
+            {
+                PauseGame(); // Встановлення паузи
+            }
+        }
+
         if (Input.GetKey(KeyCode.LeftShift))
         {
             _spead = _runSpead;
@@ -83,7 +98,7 @@ public class PlayerController : MonoBehaviour
             transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, 0f);
         }
 
-        if (Input.GetKey(KeyCode.LeftControl))
+        if (Input.GetKey(KeyCode.DownArrow))
         {
             _tylob.transform.localScale = verticalScaleSit;
             _tylob.transform.localPosition = tylobPositionSit;
@@ -95,6 +110,20 @@ public class PlayerController : MonoBehaviour
             _tylob.transform.localPosition = tylobPositionStay;
         }
 
+    }
+
+    void PauseGame()
+    {
+        EndMenu.gameObject.SetActive(true); // Виведення панелі EndMenu
+        Time.timeScale = 0f; // Постановка гри на паузу
+        isPaused = true; // Встановлення прапорця, що гра на паузі
+    }
+
+    void ResumeGame()
+    {
+        EndMenu.gameObject.SetActive(false); // Сховання панелі EndMenu
+        Time.timeScale = 1f; // Відновлення швидкості гри
+        isPaused = false; // Зняття прапорця, що гра на паузі
     }
 
     private void Jump()

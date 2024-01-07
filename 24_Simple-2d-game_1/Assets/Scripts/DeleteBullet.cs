@@ -10,7 +10,7 @@ public class DeleteBullet : MonoBehaviour
         if (collision.gameObject.CompareTag("Enemy"))
         {
             Destroy(gameObject);
-            Debug.Log("DeleteBullet");
+            //Debug.Log("DeleteBullet");
         }
 
     }

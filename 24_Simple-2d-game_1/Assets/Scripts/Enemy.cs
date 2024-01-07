@@ -16,10 +16,12 @@ public class Enemy : MonoBehaviour
     [SerializeField] float health = 3f;
     [SerializeField] float maxHealth = 3f;
     private FloatingHealthBar _floatingHealthBar;
+    private NumberOfEnemy _numberOfEnemy;
 
     private void Awake()
     {
         _floatingHealthBar = GetComponentInChildren<FloatingHealthBar>();
+        _numberOfEnemy = GameObject.FindWithTag("Player").GetComponentInParent<NumberOfEnemy>();
     }
 
     void Start()
@@ -107,6 +109,7 @@ public class Enemy : MonoBehaviour
         if(health <= 0)
         {
             Destroy(gameObject);
+            _numberOfEnemy.MinysNumberOfDestroyEnemy();
         }
     }
 }

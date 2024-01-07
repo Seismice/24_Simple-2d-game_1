@@ -23,14 +23,17 @@ public class PlayerController : MonoBehaviour
     private Vector3 tylobPositionStay = new Vector3(0f, -1f, 0f);
     private Vector3 tylobPositionSit = new Vector3(0f, -.66f, 0f);
     private Quaternion verticalRotation = Quaternion.Euler(0f, 0f, 0f);
-    [SerializeField] private EndMenu EndMenu;
+    [SerializeField] private EndMenu _endMenu;
+    [SerializeField] private WinText _winText;
     public bool isPaused = false;
+    private PlayerHealth _playerHealth;
 
 
     // Start is called before the first frame update
     void Start()
     {
         _tylob = GetComponentInChildren<Tylob>();
+        _playerHealth = GetComponent<PlayerHealth>();
     }
 
     private void Awake()
@@ -41,15 +44,11 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        GetInput();
-        Jump();
-    }
-
-    /// <summary>
-    /// Метод для керування стрілками клавіатури.
-    /// </summary>
-    private void GetInput()
-    {
+        if (!_playerHealth.isDie)
+        {
+            Jump();
+            GetInput();
+        }
         // Якщо гра не на паузі і натиснута кнопка Esc
         if (Input.GetKeyDown(KeyCode.Escape))
         {
@@ -62,7 +61,13 @@ public class PlayerController : MonoBehaviour
                 PauseGame(); // Встановлення паузи
             }
         }
+    }
 
+    /// <summary>
+    /// Метод для керування стрілками клавіатури.
+    /// </summary>
+    private void GetInput()
+    {
         if (Input.GetKey(KeyCode.LeftShift))
         {
             _spead = _runSpead;
@@ -98,7 +103,7 @@ public class PlayerController : MonoBehaviour
             transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, 0f);
         }
 
-        if (Input.GetKey(KeyCode.DownArrow))
+        if (Input.GetKey(KeyCode.LeftControl))
         {
             _tylob.transform.localScale = verticalScaleSit;
             _tylob.transform.localPosition = tylobPositionSit;
@@ -114,14 +119,15 @@ public class PlayerController : MonoBehaviour
 
     void PauseGame()
     {
-        EndMenu.gameObject.SetActive(true); // Виведення панелі EndMenu
+        _endMenu.gameObject.SetActive(true); // Виведення панелі EndMenu
         Time.timeScale = 0f; // Постановка гри на паузу
         isPaused = true; // Встановлення прапорця, що гра на паузі
     }
 
     void ResumeGame()
     {
-        EndMenu.gameObject.SetActive(false); // Сховання панелі EndMenu
+        _endMenu.gameObject.SetActive(false); // Сховання панелі EndMenu
+        _winText.gameObject.SetActive(false);
         Time.timeScale = 1f; // Відновлення швидкості гри
         isPaused = false; // Зняття прапорця, що гра на паузі
     }

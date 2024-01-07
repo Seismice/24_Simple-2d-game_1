@@ -14,16 +14,18 @@ public class RykaVerHor : MonoBehaviour
     public bool isHorizontal = false;
     private PlayerController _playerController;
     public bool isHorizontalPositionLeft = false;
+    private PlayerHealth _playerHealth;
 
     void Start()
     {
         _playerController = GetComponentInParent<PlayerController>();
+        _playerHealth = GetComponentInParent<PlayerHealth>();
     }
 
     void Update()
     {
         // Перевірка натискання кнопки Z
-        if (Input.GetKeyDown(KeyCode.Z))
+        if (Input.GetKeyDown(KeyCode.Z) && !_playerHealth.isDie)
         {
             if (_playerController.isRiht == true)
             {

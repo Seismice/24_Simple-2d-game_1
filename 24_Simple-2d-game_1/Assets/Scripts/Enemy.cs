@@ -10,7 +10,7 @@ public class Enemy : MonoBehaviour
     public float speed = 1f; // Швидкість руху прямокутника
     private GameObject player;
     private bool isLying = false;
-    public UnityEvent OnDestroyed;
+    //public UnityEvent OnDestroyed;
     //private int hitCount = 0;
     private float lieStartTime;
     [SerializeField] float health = 3f;
@@ -73,11 +73,11 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    void OnDestroy()
-    {
-        // Викликаємо подію при знищенні прямокутника
-        OnDestroyed.Invoke();
-    }
+    //void OnDestroy()
+    //{
+    //    // Викликаємо подію при знищенні прямокутника
+    //    OnDestroyed.Invoke();
+    //}
 
     void OnCollisionEnter2D(Collision2D collision)
     {

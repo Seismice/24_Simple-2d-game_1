@@ -27,6 +27,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private WinText _winText;
     public bool isPaused = false;
     private PlayerHealth _playerHealth;
+    private RykaVerHor _rykaVerHor;
 
 
     // Start is called before the first frame update
@@ -34,6 +35,7 @@ public class PlayerController : MonoBehaviour
     {
         _tylob = GetComponentInChildren<Tylob>();
         _playerHealth = GetComponent<PlayerHealth>();
+        _rykaVerHor = GetComponentInChildren<RykaVerHor>();
     }
 
     private void Awake()
@@ -44,7 +46,7 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!_playerHealth.isDie)
+        if (!_playerHealth.isDie && !IsGamePaused())
         {
             Jump();
             GetInput();
@@ -61,6 +63,11 @@ public class PlayerController : MonoBehaviour
                 PauseGame(); // Встановлення паузи
             }
         }
+    }
+
+    bool IsGamePaused()
+    {
+        return isPaused || Time.timeScale == 0f;
     }
 
     /// <summary>
@@ -85,6 +92,11 @@ public class PlayerController : MonoBehaviour
             {
                 transform.localPosition += -transform.right * _spead * Time.deltaTime;
                 isRiht = false;
+                if (_rykaVerHor.isHorizontal == true && _rykaVerHor.isHorizontalPositionLeft == false)
+                {
+                    _rykaVerHor.transform.localPosition = _rykaVerHor.horizontalPositionLeft;
+                    _rykaVerHor.isHorizontalPositionLeft = true;
+                }
                 //transform.localRotation = verticalRotation;
             }
 
@@ -92,6 +104,11 @@ public class PlayerController : MonoBehaviour
             {
                 transform.localPosition += transform.right * _spead * Time.deltaTime;
                 isRiht = true;
+                if (_rykaVerHor.isHorizontal == true && _rykaVerHor.isHorizontalPositionLeft == true)
+                {
+                    _rykaVerHor.transform.localPosition = _rykaVerHor.horizontalPosition;
+                    _rykaVerHor.isHorizontalPositionLeft = false;
+                }
                 //transform.localRotation = verticalRotation;
             } 
         }

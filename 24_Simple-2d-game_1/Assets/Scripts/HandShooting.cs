@@ -28,7 +28,7 @@ public class HandShooting : MonoBehaviour
     {
 
         // Перевірка натискання кнопки X
-        if (Input.GetKeyDown(KeyCode.X) && _rykaVerHor.isHorizontal)
+        if (Input.GetKeyDown(KeyCode.X) && _rykaVerHor.isHorizontal && !IsGamePaused())
         {
             if (_playerController.transform.rotation.eulerAngles.z < 70f || _playerController.transform.rotation.eulerAngles.z > 290f)
             {
@@ -78,6 +78,11 @@ public class HandShooting : MonoBehaviour
         }
 
 
+    }
+
+    bool IsGamePaused()
+    {
+        return _playerController.isPaused || Time.timeScale == 0f;
     }
 
     //void OnTriggerEnter2D(Collider2D other)

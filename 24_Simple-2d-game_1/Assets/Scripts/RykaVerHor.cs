@@ -5,8 +5,8 @@ using UnityEngine;
 public class RykaVerHor : MonoBehaviour
 {
     private Vector3 verticalPosition = new Vector3(0f, -0.7f, 0f);
-    private Vector3 horizontalPosition = new Vector3(0.35f, -0.35f, 0f);
-    private Vector3 horizontalPositionLeft = new Vector3(-0.35f, -0.35f, 0f);
+    public Vector3 horizontalPosition = new Vector3(0.35f, -0.35f, 0f);
+    public Vector3 horizontalPositionLeft = new Vector3(-0.35f, -0.35f, 0f);
     private Quaternion verticalRotation = Quaternion.Euler(0f, 0f, 0f);
     private Quaternion horizontalRotation = Quaternion.Euler(0f, 0f, 90f);
     //private Vector3 verticalScale = new Vector3(0.5f, 0.65f, 1f);
@@ -25,7 +25,7 @@ public class RykaVerHor : MonoBehaviour
     void Update()
     {
         // Перевірка натискання кнопки Z
-        if (Input.GetKeyDown(KeyCode.Z) && !_playerHealth.isDie)
+        if (Input.GetKeyDown(KeyCode.Z) && !_playerHealth.isDie && !IsGamePaused())
         {
             if (_playerController.isRiht == true)
             {
@@ -77,5 +77,10 @@ public class RykaVerHor : MonoBehaviour
                 isHorizontalPositionLeft = true;
             }
         }
+    }
+
+    bool IsGamePaused()
+    {
+        return _playerController.isPaused || Time.timeScale == 0f;
     }
 }

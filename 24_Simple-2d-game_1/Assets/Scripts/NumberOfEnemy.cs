@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class NumberOfEnemy : MonoBehaviour
@@ -14,6 +15,8 @@ public class NumberOfEnemy : MonoBehaviour
     [SerializeField] TMP_Text recordNumberKillZombie_Text;
     [SerializeField] private EndMenu _endMenu;
     [SerializeField] private WinText _winText;
+    [SerializeField] private Button _restartButton;
+    [SerializeField] private Button _choseLevelButton;
     private PlayerController _playerController;
     private float timer;
     private float increaseRate = 5f; // Збільшення кількості ворогів кожну секунду
@@ -56,6 +59,12 @@ public class NumberOfEnemy : MonoBehaviour
             Time.timeScale = 0f;
             _endMenu.gameObject.SetActive(true);
             _winText.gameObject.SetActive(true);
+            // Вимкнути кнопку продовжити
+            _restartButton.gameObject.SetActive(false);
+            UnlockLevel();
+            // Увімкнути кнопку вибір рівня
+            _choseLevelButton.gameObject.SetActive(true);
+
             ShowEndGame(killEnemy);
         }
     }
@@ -73,7 +82,8 @@ public class NumberOfEnemy : MonoBehaviour
 
     public void ButtonRestartClick()
     {
-        SceneManager.LoadScene("Main_0");
+        int currentLevel = SceneManager.GetActiveScene().buildIndex;
+        SceneManager.LoadScene(currentLevel);
         Time.timeScale = 1f;
     }
 
@@ -87,6 +97,38 @@ public class NumberOfEnemy : MonoBehaviour
 
     public void ButtonExitClick()
     {
-        Application.Quit();
+        SceneManager.LoadScene(0);
+        Time.timeScale = 1f;
+    }
+
+    public void ChoseLevelButton()
+    {
+        int maxBuildIndex = SceneManager.sceneCountInBuildSettings - 1;
+        int currentLevel = SceneManager.GetActiveScene().buildIndex;
+        if (currentLevel != maxBuildIndex)
+        {
+            SceneManager.LoadScene(currentLevel + 1);
+            Time.timeScale = 1f; 
+        }
+        else
+        {
+            SceneManager.LoadScene(0);
+            Time.timeScale = 1f;
+        }
+
+    }
+
+    public void UnlockLevel()
+    {
+        int maxBuildIndex = SceneManager.sceneCountInBuildSettings - 1;
+        int currentLevel = SceneManager.GetActiveScene().buildIndex;
+
+        if (currentLevel != maxBuildIndex)
+        {
+            if (currentLevel >= PlayerPrefs.GetInt("levels"))
+            {
+                PlayerPrefs.SetInt("levels", currentLevel + 1);
+            } 
+        }
     }
 }

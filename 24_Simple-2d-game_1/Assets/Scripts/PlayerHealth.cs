@@ -5,8 +5,8 @@ using UnityEngine;
 
 public class PlayerHealth : MonoBehaviour
 {
-    [SerializeField] private float maxHealth = 100f;
-    private float currentHealth;
+    public float maxHealth = 100f;
+    public float currentHealth;
     [SerializeField] private float damage = 10f;
     public bool isDie = false;
     private PlayerFloatingHealthBar _playerFloatingHealthBar;
@@ -73,6 +73,7 @@ public class PlayerHealth : MonoBehaviour
         isDie = true;
         Debug.Log("Die");
         transform.localRotation = dieRotation;
+        Time.timeScale = 0f; // Постановка гри на паузу
         _endMenu.gameObject.SetActive(true);
         _gameOverText.gameObject.SetActive(true);
         _playerController.isPaused = true;
